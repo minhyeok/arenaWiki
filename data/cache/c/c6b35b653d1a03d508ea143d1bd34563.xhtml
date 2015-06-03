@@ -1,0 +1,128 @@
+
+<h1 class="sectionedit1" id="mysql_이야기">MySQL 이야기.</h1>
+<div class="level1">
+
+<p>
+여기서는 MySQL을 써먹으면서 생겼던 일들을 두서없이 풀어놓은 곳입니다.
+</p>
+
+</div>
+<!-- EDIT1 SECTION "MySQL 이야기." [1-132] -->
+<h2 class="sectionedit2" id="중복_레코드를_방지하려면">중복 레코드를 방지하려면.</h2>
+<div class="level2">
+
+<p>
+레코드를 삽입하는 경우에 처리하려면 INSERT IGNORE
+아닌경우에는 키 속성 혹은 Unique Index를 참조하면 된다.
+</p>
+
+</div>
+<!-- EDIT2 SECTION "중복 레코드를 방지하려면." [133-323] -->
+<h2 class="sectionedit3" id="자신의_위치와_위_경도를_이용해_거리를_찾아내는_쿼리">자신의 위치와 위/경도를 이용해 거리를 찾아내는 쿼리</h2>
+<div class="level2">
+<pre class="code">   SELECT (column name) FROM (table name)
+                         (6371*acos(cos(radians(lat좌표값))*cos(radians(slLat))*cos(radians(slLng)-radians(lng좌표값))+sin(radians(lat좌표값))*sin(radians(slLat))))
+AS distance</pre>
+
+<p>
+이때 6371은 KM단위로 환산하기 위한 상수이다.
+</p>
+
+<p>
+원래 거리를 계산 하기 위한 기본적인 공식은, sqrt(x^2 + y^2). 그래서, sqrt((x1-x2)^2+ (y1-y2)^2);
+</p>
+
+<p>
+이건 거리 계산하는 걸 좀더 고민해보고 공식으로 정리할 것.
+</p>
+
+</div>
+<!-- EDIT3 SECTION "자신의 위치와 위/경도를 이용해 거리를 찾아내는 쿼리" [324-909] -->
+<h2 class="sectionedit4" id="view_써먹기">VIEW 써먹기</h2>
+<div class="level2">
+<pre class="code">  CREATE VIEW (view 이름) AS (SELECT 구문을 통해 생성된 레코드 테이블.)</pre>
+
+<p>
+이렇게 해놓으면 복잡한 SELECT 문을 수행하는 가상 테이블을 만들고 이를 SELECT하여 내부적으로 쿼리를 절약할 수 있긴 하다. 나머지는 RDB교과서의 View 항목을 참고해야 할것 같다.
+<code>View</code> 에는 insertion을 수행할 수도 있긴 하지만 힘들고 권장되지 않는다고 하는데 곧 추가하기.
+</p>
+
+</div>
+<!-- EDIT4 SECTION "VIEW 써먹기" [910-1393] -->
+<h2 class="sectionedit5" id="db_dump_떠놓기">DB Dump 떠놓기</h2>
+<div class="level2">
+
+<p>
+DUMP 를 떠놓는 것은 아래 명령으로 간단하게 가능하다.
+</p>
+<pre class="code">  mysqldump -u root -p (databaseName) &gt; (arbit_name).sql</pre>
+
+<p>
+특정 테이블만 떠놓으려면,
+</p>
+<pre class="code">  mysqldump -u root -p (databaseName) (someTable) &gt; (arbit_name).sql</pre>
+
+<p>
+<code>Schema</code>만 백업받기.
+</p>
+<pre class="code">  mysqldump -u root -p -d (databaseName) (someTable-optional) &gt; (arbit_name).sql
+  </pre>
+
+<p>
+<code>Data</code> 만 백업받기.
+</p>
+<pre class="code">  mysqldump -u root -p --no-create-info (databaseName) (someTable-optional) &gt; (arbit_name).sql</pre>
+
+<p>
+<strong>복구</strong> 할때는 그냥 SQL 문을 실행하는 것이라 생각하면 된다.
+</p>
+<pre class="code">  mysql -u root -p (dbName) &lt; (arbit_name).sql</pre>
+
+</div>
+<!-- EDIT5 SECTION "DB Dump 떠놓기" [1394-2045] -->
+<h2 class="sectionedit6" id="character_set_utf-8">Character Set UTF-8</h2>
+<div class="level2">
+
+</div>
+<!-- EDIT6 SECTION "Character Set UTF-8" [2046-2078] -->
+<h2 class="sectionedit7" id="transaction_처리">Transaction 처리</h2>
+<div class="level2">
+
+<p>
+트랜잭션은 일련의 명령을 하나의 단위로 묶어내어서 명령의 &#039;원자성&#039;을 보장하기 위한 것.
+기본적으로, MySQL의 Transaction처리에 관한 내용은 아래의 주소에서 다 언급을 하고 있다.
+</p>
+
+<p>
+<a href="https://dev.mysql.com/doc/refman/5.0/en/commit.html" class="urlextern" title="https://dev.mysql.com/doc/refman/5.0/en/commit.html"  rel="nofollow">MySQL 공식 레퍼런스.</a>
+</p>
+
+<p>
+명령은 아래와 같은 내용으로 수행.
+</p>
+<pre class="code">  START TRANSACTION;
+  SELECT () FROM (table) WHERE (where);
+  UPDATE (table) SET (something) WHERE (where);
+  COMMIT;
+  </pre>
+
+<p>
+기본적으로 MySQL은 autocommit 이 활성화 된 상태. 이는 즉 명령을 실행하는 대로 바로 디스크에 기록한다는 의미. 이것을 &#039;암시적&#039;으로 해제 하기 위해 사용하는 것이 <code>START TRANSACTION.</code>. 사실 위의 명령에 <code>COMMIT</code>명령이 있는 이유가 명시적인 Commit 명령을 수행하기 위한 것인 듯. 이게아닐때 보통은  <code>BEGIN</code>을 사용한다.
+</p>
+
+<p>
+되돌릴 때는 <code>ROLLBACK</code>을 사용한다.
+</p>
+<pre class="code">  ROLLBACK (something)</pre>
+
+<p>
+꾸준하게 쓰자 꾸준하게…
+</p>
+
+</div>
+<!-- EDIT7 SECTION "Transaction 처리" [2079-3143] -->
+<h2 class="sectionedit8" id="innodb와_myisam_그리고_기타_다른_db엔진들">InnoDB와 MyISAM. 그리고 기타 다른 DB엔진들</h2>
+<div class="level2">
+
+</div>
+<!-- EDIT8 SECTION "InnoDB와 MyISAM. 그리고 기타 다른 DB엔진들" [3144-] -->
