@@ -32,4 +32,42 @@
 </p>
 
 </div>
-<!-- EDIT2 SECTION "CAP이론" [113-] -->
+<!-- EDIT2 SECTION "CAP이론" [113-958] -->
+<h2 class="sectionedit3" id="redis">REDIS</h2>
+<div class="level2">
+
+<p>
+올타임 가용성을 보장하는 &#039;캐시&#039;의 용도로 주로 사용함. 키-밸류 스토어.
+자세한것은 나중에.
+</p>
+
+</div>
+<!-- EDIT3 SECTION "REDIS" [959-1102] -->
+<h3 class="sectionedit4" id="redis의_보안설정">REDIS의 보안설정</h3>
+<div class="level3">
+
+<p>
+기본적으로 REDIS는 보안을 염두에 두고 설계된 것이 아닌고로, 서버 인스턴스에 비밀번호는 따로 걸어주어야 한다.
+</p>
+
+<p>
+ /etc/redis/redis.conf에서,
+</p>
+<pre class="code"> requirepass (비밀번호)
+ ...(후략)</pre>
+
+<p>
+ 를 입력하고 재기동한다.
+</p>
+
+<p>
+후에 REDIS 콘솔에서
+</p>
+<pre class="code"> AUTH (비밀번호)</pre>
+
+<p>
+명령을 입력하면, 간단한 보안설정이 완료된다.
+</p>
+
+</div>
+<!-- EDIT4 SECTION "REDIS의 보안설정" [1103-] -->

@@ -2,6 +2,33 @@
 
 여기서는 MySQL을 써먹으면서 생겼던 일들을 두서없이 풀어놓은 곳입니다.
 
+앞으로 찾아봐서 업데이트 할것을 여기에 적자.
+
+    * Character-Set과 Collation의 차이.
+    * Index의 기법과 B 트리의 원리
+
+===== CentOS 에서 MySQL설치 하기. =====
+
+[[자주 써먹는 리눅스 꼼수]] 참고할것.<del>apt-get을 쓰는 우분투보다 훨-씬 거지같다. 우분투 만세</del>
+
+===== 데이터베이스의 기본 로케일 세팅하기. =====
+
+등록예정.
+
+https://www.linux.co.kr/home2/board/subbs/board.php?bo_table=lecture&wr_id=1654 여기를 참고할것.
+
+===== 외부에서도 접속할 수 있게 하기 =====
+
+콘솔 내에서 해당 유저에 대해 접근권한을 부여하자.
+  insert into mysql.user (host, user, password, ssl_cipher, x509_issuer, x509_subject) values ('%', 'root', password('--패스워드--'), '', '', '');
+이러고 서비스를 다시시작해야된다.
+===== 계정의 패스워드 설정하기 =====
+
+보통은 관리 콘솔 등을 통해 패스워드를 입력할 기회를 제공하지만 그것이 아니라면,
+
+  update user set password=password('new-password') where user='root';
+  flush privileges; // 권한 테이블을 업데이트 하는것.
+
 ===== 중복 레코드를 방지하려면. =====
 
 레코드를 삽입하는 경우에 처리하려면 INSERT IGNORE
@@ -9,8 +36,7 @@
 
 ===== 자신의 위치와 위/경도를 이용해 거리를 찾아내는 쿼리 =====
 
-     SELECT (column name) FROM (table name)
-                           (6371*acos(cos(radians(lat좌표값))*cos(radians(slLat))*cos(radians(slLng)-radians(lng좌표값))+sin(radians(lat좌표값))*sin(radians(slLat))))
+  SELECT (column name) FROM (table name) (6371*acos(cos(radians(lat좌표값))*cos(radians(slLat))*cos(radians(slLng)-radians(lng좌표값))+sin(radians(lat좌표값))*sin(radians(slLat))))
 	AS distance
 
 이때 6371은 KM단위로 환산하기 위한 상수이다.
@@ -51,6 +77,21 @@ DUMP 를 떠놓는 것은 아래 명령으로 간단하게 가능하다.
 
 ===== Character Set UTF-8 =====
 
+mysql 콘솔 접속 후, 우선 아래 명령을 통해 확인.
+
+  show variables like 'c%';
+  
+이러면 utf8이 아니라 latin1같은 이상한 코드로 반영이 되어있다.
+이것을 바꾸기 위해서 /etc/my.cnf 를 변경하고 서비스를 재시작하자.
+
+  [mysqld]
+  init_connect="SET collation_connection=utf8_general_ci"
+  init_connect="SET NAMES utf8"
+  character-set-server=utf8
+  collation-server=utf8_general_ci
+  skip-character-set-client-handshake
+  
+
 ===== Transaction 처리 =====
 
 트랜잭션은 일련의 명령을 하나의 단위로 묶어내어서 명령의 '원자성'을 보장하기 위한 것.
@@ -73,4 +114,29 @@ DUMP 를 떠놓는 것은 아래 명령으로 간단하게 가능하다.
 
 꾸준하게 쓰자 꾸준하게...
 
+===== 'Datetime' column의 기본 값을 지금 시간으로 하기 =====
+
+이걸로 한방에 하면 끝.
+
+  ALTER TABLE `테이블명` CHANGE `컬럼명` `컬럼명` TIMESTAMP ON UPDATE CURRENT_TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL;
+
+===== Replication 설정하기. =====
+
+Master와 Slave 관계의 두 데이터베이스가 필요하다.
+===== Nested Query =====
+
+별거 없다. 일단 이렇게 써먹었다.
+
+  SELECT (column) FROM (table) WHERE (column) in (Another Query)...
+
+기억으로는 성능 이슈가 있었던것 같은데, 나중에 추가하기.
+
+===== RDB 그리고 JOIN =====
+
+{{ :visual_sql_joins_v2.png?300 |}}
+
+지금 수행하는 프로젝트에서는 LEFT JOIN을 많이 사용한다.
+
+  * LEFT JOIN : 두 테이블간 관계에서 주 테이블의 레코드는 모두 싣고 보조 테이블의 레코드는 FK에 있으면 싣고 없으면 말고.
+  * INNER JOIN : JOIN 하려는 FK 가 있을때만 새로 싣는다.
 ===== InnoDB와 MyISAM. 그리고 기타 다른 DB엔진들 =====

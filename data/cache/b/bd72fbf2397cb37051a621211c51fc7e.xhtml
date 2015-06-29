@@ -7,13 +7,90 @@
 </p>
 
 </div>
-<!-- EDIT1 SECTION "자주 써먹는 리눅스 꼼수" [1-137] -->
-<h2 class="sectionedit2" id="명령어들">명령어들</h2>
+<!-- EDIT1 SECTION "자주 써먹는 리눅스 꼼수" [1-138] -->
+<h2 class="sectionedit2" id="centos_삽질의_궤적">CentOS 삽질의 궤적</h2>
 <div class="level2">
 
 </div>
-<!-- EDIT2 SECTION "명령어들" [138-163] -->
-<h3 class="sectionedit3" id="scpsecure_copy">SCP : (Secure copy)</h3>
+<!-- EDIT2 SECTION "CentOS 삽질의 궤적" [139-175] -->
+<h3 class="sectionedit3" id="mysql_의_설치">MySQL 의 설치</h3>
+<div class="level3">
+
+<p>
+기본적으로 설정되어있는 yum Repository의 mysql 버전은 5.1 버전으로 굉장히 낮은 버전이다!
+그래서 이 Repository를 최신화 한 다음에 yum을 활용하여 설치해야 한다.
+</p>
+
+<p>
+우선, MYSQL저장소 정보를 다운받는다.
+</p>
+<pre class="code"> wget http://repo.mysql.com/mysql-community-release-el6-5.noarch.rpm</pre>
+
+<p>
+다음, <strong>rpm -ivh (아까 다운받은 파일)</strong> 을 입력하면 해당 저장소를 yum에 입력한다.
+</p>
+
+<p>
+이 다음,
+</p>
+<pre class="code"> yum install mysql-server</pre>
+
+<p>
+이후 반영된 mysql repository를 참조하여 대상 패키지와 관련된 패키지를 모두 다운 받을 수 있다.
+</p>
+
+<p>
+다 받은 다음에는 아래와 같은 명령을 통해 설정.
+</p>
+<pre class="code"> sudo service mysqld start // mysql 서비스 시작
+ sudo chkconfig mysqld on // mysql 데몬이 부팅시 항상 시작하게끔 확인
+ chkconfig --list mysqld // init 0 등 어떤 명령에서 데몬이 실행되는지 확인.
+ </pre>
+
+<p>
+이후, /etc/my.cnf파일에서 여러가지 설정을 건들자. <a href="/dokuwiki/doku.php?id=mysql_%EC%9D%B4%EC%95%BC%EA%B8%B0" class="wikilink1" title="mysql_이야기">MySQL 이야기</a>참조.
+</p>
+
+</div>
+<!-- EDIT3 SECTION "MySQL 의 설치" [176-1214] -->
+<h3 class="sectionedit4" id="자기_계정에_설치된_패키지_확인하기">자기 계정에 설치된 패키지 확인하기</h3>
+<div class="level3">
+
+<p>
+CentOS<sup><a href="#fn__1" id="fnt__1" class="fn_top">1)</a></sup>는 우분투와는 다르게 패키지 매니저로 YUM과 RPM<sup><a href="#fn__2" id="fnt__2" class="fn_top">2)</a></sup>를 사용한다.
+</p>
+
+</div>
+
+<h4 id="설치된_패키지_보기">설치된 패키지 보기.</h4>
+<div class="level4">
+<pre class="code">  rpm -qa  ((grep명령어로 원하는 것을 찾는것이 좋다))
+  yum list installed</pre>
+
+</div>
+<!-- EDIT4 SECTION "자기 계정에 설치된 패키지 확인하기" [1215-1668] -->
+<h3 class="sectionedit5" id="리눅스의_버전확인">리눅스의 버전확인.</h3>
+<div class="level3">
+<pre class="code"> cat /etc/*-release</pre>
+
+<p>
+혹은…
+</p>
+<pre class="code"> rpm -qa *-release</pre>
+
+<p>
+혹은,(커널 버전 확인)
+</p>
+<pre class="code"> uname -r</pre>
+
+</div>
+<!-- EDIT5 SECTION "리눅스의 버전확인." [1669-1802] -->
+<h2 class="sectionedit6" id="명령어들">명령어들</h2>
+<div class="level2">
+
+</div>
+<!-- EDIT6 SECTION "명령어들" [1803-1828] -->
+<h3 class="sectionedit7" id="scpsecure_copy">SCP : (Secure copy)</h3>
 <div class="level3">
 
 <p>
@@ -33,66 +110,13 @@ scp root@intoarena1.cafe24.com:/home/intoarena/something.jpg  something.jpg</pre
 </ul>
 
 </div>
-<!-- EDIT3 SECTION "SCP : (Secure copy)" [164-623] -->
-<h3 class="sectionedit4" id="centos_에서_가기_계정에_설치된_패키지_확인하기">CentOS 에서 가기 계정에 설치된 패키지 확인하기</h3>
+<!-- EDIT7 SECTION "SCP : (Secure copy)" [1829-2288] -->
+<h3 class="sectionedit8" id="방화벽_관련iptables">방화벽 관련 : iptables</h3>
 <div class="level3">
-
-<p>
-CentOS<sup><a href="#fn__1" id="fnt__1" class="fn_top">1)</a></sup>는 우분투와는 다르게 패키지 매니저로 YUM과 RPM<sup><a href="#fn__2" id="fnt__2" class="fn_top">2)</a></sup>를 사용한다.
-</p>
+<pre class="code">iptables를 참조하자.</pre>
 
 </div>
-
-<h4 id="설치된_패키지_보기">설치된 패키지 보기.</h4>
-<div class="level4">
-<pre class="code">  rpm -qa  ((grep명령어로 원하는 것을 찾는것이 좋다))
-  yum list installed</pre>
-
-</div>
-<!-- EDIT4 SECTION "CentOS 에서 가기 계정에 설치된 패키지 확인하기" [624-1091] -->
-<h3 class="sectionedit5" id="mysql_설치_하기">MySQL 설치 하기.</h3>
-<div class="level3">
-
-<p>
-기본 저장소로는 최신버전을 설치할 수 없으므로, webtatic-release패키지를 설치한다.
-</p>
-<pre class="code">  rpm -Uvh http://mirror.webtatic.com/yum/el6/latest.rpm</pre>
-
-<p>
-확인은,
-</p>
-<pre class="code">  yum repolist | grep webtatic
- </pre>
-
-<p>
-안됐다.
-결국,mysql 홈페이지에서 직접 다운로드 링크를 획득하고, 
-</p>
-<pre class="code">  wget http://dev.mysql.com/get/Downloads/MySQL-5.6/MySQL-5.6.24-1.el7.src.rpm
-  rpm -ivh MySQL-5.6.24-1.el7.src.rpm </pre>
-
-<p>
-이것은 소스를 얻는 것이므로, rpmbuild/SOURCE에서 tar압축을 해제하고 소스를 설치하면 된다.
-</p>
-
-</div>
-<!-- EDIT5 SECTION "MySQL 설치 하기." [1092-1675] -->
-<h3 class="sectionedit6" id="리눅스의_버전확인">리눅스의 버전확인.</h3>
-<div class="level3">
-<pre class="code"> cat /etc/*-release</pre>
-
-<p>
-혹은…
-</p>
-<pre class="code"> rpm -qa *-release</pre>
-
-<p>
-혹은,(커널 버전 확인)
-</p>
-<pre class="code"> uname -r</pre>
-
-</div>
-<!-- EDIT6 SECTION "리눅스의 버전확인." [1676-] --><div class="footnotes">
+<!-- EDIT8 SECTION "방화벽 관련 : iptables" [2289-] --><div class="footnotes">
 <div class="fn"><sup><a href="#fnt__1" id="fn__1" class="fn_bot">1)</a></sup> 
 레드햇의 RHEL을 반영하되, 기술지원 요소를 제외하고 무료로 배포하는 리눅스. 주로 중소규모 서버에서 사용.</div>
 <div class="fn"><sup><a href="#fnt__2" id="fn__2" class="fn_bot">2)</a></sup> 

@@ -6,9 +6,66 @@
 여기서는 MySQL을 써먹으면서 생겼던 일들을 두서없이 풀어놓은 곳입니다.
 </p>
 
+<p>
+앞으로 찾아봐서 업데이트 할것을 여기에 적자.
+</p>
+<ul>
+<li class="level1"><div class="li"> Character-Set과 Collation의 차이.</div>
+</li>
+<li class="level2"><div class="li"> Index의 기법과 B 트리의 원리</div>
+</li>
+</ul>
+
 </div>
-<!-- EDIT1 SECTION "MySQL 이야기." [1-132] -->
-<h2 class="sectionedit2" id="중복_레코드를_방지하려면">중복 레코드를 방지하려면.</h2>
+<!-- EDIT1 SECTION "MySQL 이야기." [1-286] -->
+<h2 class="sectionedit2" id="centos_에서_mysql설치_하기">CentOS 에서 MySQL설치 하기.</h2>
+<div class="level2">
+
+<p>
+<a href="/dokuwiki/doku.php?id=%EC%9E%90%EC%A3%BC_%EC%8D%A8%EB%A8%B9%EB%8A%94_%EB%A6%AC%EB%88%85%EC%8A%A4_%EA%BC%BC%EC%88%98" class="wikilink1" title="자주_써먹는_리눅스_꼼수">자주 써먹는 리눅스 꼼수</a> 참고할것.<del>apt-get을 쓰는 우분투보다 훨-씬 거지같다. 우분투 만세</del>
+</p>
+
+</div>
+<!-- EDIT2 SECTION "CentOS 에서 MySQL설치 하기." [287-469] -->
+<h2 class="sectionedit3" id="데이터베이스의_기본_로케일_세팅하기">데이터베이스의 기본 로케일 세팅하기.</h2>
+<div class="level2">
+
+<p>
+등록예정.
+</p>
+
+<p>
+<a href="https://www.linux.co.kr/home2/board/subbs/board.php?bo_table=lecture&amp;wr_id=1654" class="urlextern" title="https://www.linux.co.kr/home2/board/subbs/board.php?bo_table=lecture&amp;wr_id=1654"  rel="nofollow">https://www.linux.co.kr/home2/board/subbs/board.php?bo_table=lecture&amp;wr_id=1654</a> 여기를 참고할것.
+</p>
+
+</div>
+<!-- EDIT3 SECTION "데이터베이스의 기본 로케일 세팅하기." [470-655] -->
+<h2 class="sectionedit4" id="외부에서도_접속할_수_있게_하기">외부에서도 접속할 수 있게 하기</h2>
+<div class="level2">
+
+<p>
+콘솔 내에서 해당 유저에 대해 접근권한을 부여하자.
+</p>
+<pre class="code">insert into mysql.user (host, user, password, ssl_cipher, x509_issuer, x509_subject) values (&#039;%&#039;, &#039;root&#039;, password(&#039;--패스워드--&#039;), &#039;&#039;, &#039;&#039;, &#039;&#039;);</pre>
+
+<p>
+이러고 서비스를 다시시작해야된다.
+</p>
+
+</div>
+<!-- EDIT4 SECTION "외부에서도 접속할 수 있게 하기" [656-983] -->
+<h2 class="sectionedit5" id="계정의_패스워드_설정하기">계정의 패스워드 설정하기</h2>
+<div class="level2">
+
+<p>
+보통은 관리 콘솔 등을 통해 패스워드를 입력할 기회를 제공하지만 그것이 아니라면,
+</p>
+<pre class="code">update user set password=password(&#039;new-password&#039;) where user=&#039;root&#039;;
+flush privileges; // 권한 테이블을 업데이트 하는것.</pre>
+
+</div>
+<!-- EDIT5 SECTION "계정의 패스워드 설정하기" [984-1286] -->
+<h2 class="sectionedit6" id="중복_레코드를_방지하려면">중복 레코드를 방지하려면.</h2>
 <div class="level2">
 
 <p>
@@ -17,11 +74,10 @@
 </p>
 
 </div>
-<!-- EDIT2 SECTION "중복 레코드를 방지하려면." [133-323] -->
-<h2 class="sectionedit3" id="자신의_위치와_위_경도를_이용해_거리를_찾아내는_쿼리">자신의 위치와 위/경도를 이용해 거리를 찾아내는 쿼리</h2>
+<!-- EDIT6 SECTION "중복 레코드를 방지하려면." [1287-1477] -->
+<h2 class="sectionedit7" id="자신의_위치와_위_경도를_이용해_거리를_찾아내는_쿼리">자신의 위치와 위/경도를 이용해 거리를 찾아내는 쿼리</h2>
 <div class="level2">
-<pre class="code">   SELECT (column name) FROM (table name)
-                         (6371*acos(cos(radians(lat좌표값))*cos(radians(slLat))*cos(radians(slLng)-radians(lng좌표값))+sin(radians(lat좌표값))*sin(radians(slLat))))
+<pre class="code">SELECT (column name) FROM (table name) (6371*acos(cos(radians(lat좌표값))*cos(radians(slLat))*cos(radians(slLng)-radians(lng좌표값))+sin(radians(lat좌표값))*sin(radians(slLat))))
 AS distance</pre>
 
 <p>
@@ -37,8 +93,8 @@ AS distance</pre>
 </p>
 
 </div>
-<!-- EDIT3 SECTION "자신의 위치와 위/경도를 이용해 거리를 찾아내는 쿼리" [324-909] -->
-<h2 class="sectionedit4" id="view_써먹기">VIEW 써먹기</h2>
+<!-- EDIT7 SECTION "자신의 위치와 위/경도를 이용해 거리를 찾아내는 쿼리" [1478-2033] -->
+<h2 class="sectionedit8" id="view_써먹기">VIEW 써먹기</h2>
 <div class="level2">
 <pre class="code">  CREATE VIEW (view 이름) AS (SELECT 구문을 통해 생성된 레코드 테이블.)</pre>
 
@@ -48,8 +104,8 @@ AS distance</pre>
 </p>
 
 </div>
-<!-- EDIT4 SECTION "VIEW 써먹기" [910-1393] -->
-<h2 class="sectionedit5" id="db_dump_떠놓기">DB Dump 떠놓기</h2>
+<!-- EDIT8 SECTION "VIEW 써먹기" [2034-2517] -->
+<h2 class="sectionedit9" id="db_dump_떠놓기">DB Dump 떠놓기</h2>
 <div class="level2">
 
 <p>
@@ -79,13 +135,29 @@ DUMP 를 떠놓는 것은 아래 명령으로 간단하게 가능하다.
 <pre class="code">  mysql -u root -p (dbName) &lt; (arbit_name).sql</pre>
 
 </div>
-<!-- EDIT5 SECTION "DB Dump 떠놓기" [1394-2045] -->
-<h2 class="sectionedit6" id="character_set_utf-8">Character Set UTF-8</h2>
+<!-- EDIT9 SECTION "DB Dump 떠놓기" [2518-3169] -->
+<h2 class="sectionedit10" id="character_set_utf-8">Character Set UTF-8</h2>
 <div class="level2">
 
+<p>
+mysql 콘솔 접속 후, 우선 아래 명령을 통해 확인.
+</p>
+<pre class="code">show variables like &#039;c%&#039;;</pre>
+
+<p>
+이러면 utf8이 아니라 latin1같은 이상한 코드로 반영이 되어있다.
+이것을 바꾸기 위해서 /etc/my.cnf 를 변경하고 서비스를 재시작하자.
+</p>
+<pre class="code">[mysqld]
+init_connect=&quot;SET collation_connection=utf8_general_ci&quot;
+init_connect=&quot;SET NAMES utf8&quot;
+character-set-server=utf8
+collation-server=utf8_general_ci
+skip-character-set-client-handshake</pre>
+
 </div>
-<!-- EDIT6 SECTION "Character Set UTF-8" [2046-2078] -->
-<h2 class="sectionedit7" id="transaction_처리">Transaction 처리</h2>
+<!-- EDIT10 SECTION "Character Set UTF-8" [3170-3679] -->
+<h2 class="sectionedit11" id="transaction_처리">Transaction 처리</h2>
 <div class="level2">
 
 <p>
@@ -120,9 +192,61 @@ DUMP 를 떠놓는 것은 아래 명령으로 간단하게 가능하다.
 </p>
 
 </div>
-<!-- EDIT7 SECTION "Transaction 처리" [2079-3143] -->
-<h2 class="sectionedit8" id="innodb와_myisam_그리고_기타_다른_db엔진들">InnoDB와 MyISAM. 그리고 기타 다른 DB엔진들</h2>
+<!-- EDIT11 SECTION "Transaction 처리" [3680-4744] -->
+<h2 class="sectionedit12" id="datetime_column의_기본_값을_지금_시간으로_하기">&#039;Datetime&#039; column의 기본 값을 지금 시간으로 하기</h2>
+<div class="level2">
+
+<p>
+이걸로 한방에 하면 끝.
+</p>
+<pre class="code">ALTER TABLE `테이블명` CHANGE `컬럼명` `컬럼명` TIMESTAMP ON UPDATE CURRENT_TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL;</pre>
+
+</div>
+<!-- EDIT12 SECTION "'Datetime' column의 기본 값을 지금 시간으로 하기" [4745-4987] -->
+<h2 class="sectionedit13" id="replication_설정하기">Replication 설정하기.</h2>
+<div class="level2">
+
+<p>
+Master와 Slave 관계의 두 데이터베이스가 필요하다.
+</p>
+
+</div>
+<!-- EDIT13 SECTION "Replication 설정하기." [4988-5092] -->
+<h2 class="sectionedit14" id="nested_query">Nested Query</h2>
+<div class="level2">
+
+<p>
+별거 없다. 일단 이렇게 써먹었다.
+</p>
+<pre class="code">SELECT (column) FROM (table) WHERE (column) in (Another Query)...</pre>
+
+<p>
+기억으로는 성능 이슈가 있었던것 같은데, 나중에 추가하기.
+</p>
+
+</div>
+<!-- EDIT14 SECTION "Nested Query" [5093-5316] -->
+<h2 class="sectionedit15" id="rdb_그리고_join">RDB 그리고 JOIN</h2>
+<div class="level2">
+
+<p>
+<a href="/dokuwiki/lib/exe/detail.php?id=mysql_%EC%9D%B4%EC%95%BC%EA%B8%B0&amp;media=visual_sql_joins_v2.png" class="media" title="visual_sql_joins_v2.png"><img src="/dokuwiki/lib/exe/fetch.php?w=300&amp;tok=3fc95a&amp;media=visual_sql_joins_v2.png" class="mediacenter" alt="" width="300" /></a>
+</p>
+
+<p>
+지금 수행하는 프로젝트에서는 LEFT JOIN을 많이 사용한다.
+</p>
+<ul>
+<li class="level1"><div class="li"> LEFT JOIN : 두 테이블간 관계에서 주 테이블의 레코드는 모두 싣고 보조 테이블의 레코드는 FK에 있으면 싣고 없으면 말고.</div>
+</li>
+<li class="level1"><div class="li"> INNER JOIN : JOIN 하려는 FK 가 있을때만 새로 싣는다.</div>
+</li>
+</ul>
+
+</div>
+<!-- EDIT15 SECTION "RDB 그리고 JOIN" [5317-5696] -->
+<h2 class="sectionedit16" id="innodb와_myisam_그리고_기타_다른_db엔진들">InnoDB와 MyISAM. 그리고 기타 다른 DB엔진들</h2>
 <div class="level2">
 
 </div>
-<!-- EDIT8 SECTION "InnoDB와 MyISAM. 그리고 기타 다른 DB엔진들" [3144-] -->
+<!-- EDIT16 SECTION "InnoDB와 MyISAM. 그리고 기타 다른 DB엔진들" [5697-] -->

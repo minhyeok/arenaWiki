@@ -2,6 +2,47 @@
 
 내가 리눅스에서 맨날 구글링해서 찾아놓는 것들은 여기에 적자.
 
+
+===== CentOS 삽질의 궤적 =====
+
+==== MySQL 의 설치 ====
+
+기본적으로 설정되어있는 yum Repository의 mysql 버전은 5.1 버전으로 굉장히 낮은 버전이다!
+그래서 이 Repository를 최신화 한 다음에 yum을 활용하여 설치해야 한다.
+
+우선, MYSQL저장소 정보를 다운받는다.
+
+   wget http://repo.mysql.com/mysql-community-release-el6-5.noarch.rpm
+
+다음, **rpm -ivh (아까 다운받은 파일)** 을 입력하면 해당 저장소를 yum에 입력한다.
+
+이 다음,
+   yum install mysql-server
+이후 반영된 mysql repository를 참조하여 대상 패키지와 관련된 패키지를 모두 다운 받을 수 있다.
+
+다 받은 다음에는 아래와 같은 명령을 통해 설정.
+   sudo service mysqld start // mysql 서비스 시작
+   sudo chkconfig mysqld on // mysql 데몬이 부팅시 항상 시작하게끔 확인
+   chkconfig --list mysqld // init 0 등 어떤 명령에서 데몬이 실행되는지 확인.
+   
+이후, /etc/my.cnf파일에서 여러가지 설정을 건들자. [[MySQL 이야기]]참조.
+
+==== 자기 계정에 설치된 패키지 확인하기 ===
+
+CentOS((레드햇의 RHEL을 반영하되, 기술지원 요소를 제외하고 무료로 배포하는 리눅스. 주로 중소규모 서버에서 사용.))는 우분투와는 다르게 패키지 매니저로 YUM과 RPM((Redhat Package Manager))를 사용한다.
+
+=== 설치된 패키지 보기. ===
+    rpm -qa  ((grep명령어로 원하는 것을 찾는것이 좋다))
+    yum list installed
+
+==== 리눅스의 버전확인. ====
+   cat /etc/*-release
+혹은...
+   rpm -qa *-release
+혹은,(커널 버전 확인)
+
+   uname -r
+
 ===== 명령어들 =====
 
 ==== SCP : (Secure copy) ====
@@ -18,35 +59,7 @@
 
   * '-r'옵션을 주면 폴더 카피가 가능하다.
 
-==== CentOS 에서 가기 계정에 설치된 패키지 확인하기 ===
+==== 방화벽 관련 : iptables ====
 
-CentOS((레드햇의 RHEL을 반영하되, 기술지원 요소를 제외하고 무료로 배포하는 리눅스. 주로 중소규모 서버에서 사용.))는 우분투와는 다르게 패키지 매니저로 YUM과 RPM((Redhat Package Manager))를 사용한다.
+  iptables를 참조하자.
 
-=== 설치된 패키지 보기. ===
-    rpm -qa  ((grep명령어로 원하는 것을 찾는것이 좋다))
-    yum list installed
-
-==== MySQL 설치 하기. ====
-
-기본 저장소로는 최신버전을 설치할 수 없으므로, webtatic-release패키지를 설치한다.
-
-    rpm -Uvh http://mirror.webtatic.com/yum/el6/latest.rpm
-확인은,
-    yum repolist | grep webtatic
-   
-안됐다.
-결국,mysql 홈페이지에서 직접 다운로드 링크를 획득하고, 
-    wget http://dev.mysql.com/get/Downloads/MySQL-5.6/MySQL-5.6.24-1.el7.src.rpm
-    rpm -ivh MySQL-5.6.24-1.el7.src.rpm 
-
-이것은 소스를 얻는 것이므로, rpmbuild/SOURCE에서 tar압축을 해제하고 소스를 설치하면 된다.
-
-
-
-==== 리눅스의 버전확인. ====
-   cat /etc/*-release
-혹은...
-   rpm -qa *-release
-혹은,(커널 버전 확인)
-
-   uname -r
